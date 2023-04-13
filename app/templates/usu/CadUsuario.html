@@ -1,0 +1,163 @@
+{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+		
+	<div class="col-8 m-auto pt-2 pb-2">
+		<a href="/usuario" class="btn btn-info">Voltar</a> 
+	</div> 
+	
+
+	<div class="col-8 m-auto pt-1 pb-2">
+		
+		<div id="result"></div>
+
+		<form name="form" id="form"  action="{% if db %}/update/{{db.id}}/{% else %}/create/{% endif %}" method="POST">
+					
+
+			{% if msg %}
+
+
+			{% endif %}
+
+			
+		<!-- Proteção para o formulario -->
+		
+		<!-- {{form.as_p}}  {{form.as_table}} -->
+
+		<!--<label>Login</label>
+			<div class="form-group mb-3"> {{form.login}} </div>	
+			<label >Nome</label>          
+			<div class="form-group mb-3"> {{form.nome}} </div>	
+			<label>CPF  </label>   
+			<div class="form-group mb-3"> {{form.cpf}} </div>	
+			<label>RG </label>      
+			<div class="form-group mb-3"> {{form.rg}} </div>	
+			<label>Nome da Mae</label>  
+			<div class="form-group mb-3"> {{form.nmae}} </div>
+			<label>Nome do Pai</label>
+			<div class="form-group mb-3"> {{form.npai}} </div>	
+			<label>E-mail</label>
+			<div class="form-group mb-3"> {{form.email}} </div>				
+			<label>Dt. Nascimento</label>
+			<div class="form-group mb-3"> {{form.datnasc}} </div>	
+			<label >Celular</label>		
+			<div class="form-group mb-3"> {{form.celular}} </div>	
+			<label>Endereço</label>			
+			<div class="form-group mb-3"> {{form.endereco}} </div>	
+			<label>Complemento</label>			
+			<div class="form-group mb-3"> {{form.endcompl}} </div>	
+			<label>Bairro</label>	
+			<div class="form-group mb-3"> {{form.bairro}} </div>
+			<label>Cep </label>	
+			<div class="form-group mb-3"> {{form.cep}} </div>
+			<label>Cidade </label>	
+			<div class="form-group mb-3"> {{form.cidade}} </div>	
+			<label>Uf </label>	
+			<div class="form-group mb-3"> {{form.uf}} </div>
+			<label>Pais </label>	
+			<div class="form-group mb-3"> {{form.pais}} </div>
+			<label>Senha </label>	
+			<div class="form-group mb-3"> {{form.senha}} </div>
+			<label>Confirme a Senha</label>	
+			<div class="form-group mb-3"> {{form.conf_senha}} </div> -->
+			
+			<table class="table">
+			<!-- 1a Coluna -->
+			  	<thead>
+				    <tr>
+				      <th class="form-group" scope="col">Login</th>
+				      <th class="form-group" scope="col">Nome</th>
+				      <th class="form-group" scope="col">CPF</th>
+				      <th class="form-group" scope="col">RG</th>
+				      <th class="form-group" scope="col">Nascimento</th>
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+				      	<td>{{form.login}}</td>
+				     	<td>{{form.nome}}</td>
+		 			 	<td>{{form.cpf}}</td>
+					    <td>{{form.rg}}</td>
+					    <td>{{form.datnasc}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 2a Coluna -->
+			  	<thead>
+				    <tr>
+	  					<th scope="col">Nome Mae</th>
+					    <th scope="col">Nome Pai</th>			      
+					    <th scope="col">Email</th>
+					    <th scope="col">Celular</th>
+					    <th scope="col">Cep</th>		   			      
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+						<td>{{form.nmae}}</td>
+		        		<td>{{form.npai}}</td>
+		        		<td>{{form.email}}</td>
+		        		<td>{{form.celular}}</td>
+		        		<td name="cep">{{form.cep}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 3a Coluna -->
+			  	<thead>
+				    <tr>
+				    	<th scope="col">Endereço</th>
+					    <th scope="col" >Complemento</th>	
+					    <th scope="col" >Bairro</th>	
+					    <th scope="col" >Cidade</th>	
+					    <th scope="col" >UF</th>		
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+		        		<td name="endereco">{{form.endereco}}</td>
+		        		<td name="endcompl">{{form.endcompl}}</td>
+		        		<td name="bairro">{{form.bairro}}</td>
+		        		<td name="cidade">{{form.cidade}}</td>
+		        		<td name="uf">{{form.uf}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 4a Coluna -->
+			  	<thead>
+				    <tr>
+					    <th scope="col">Pais</th>	
+					    <th scope="col">Senha</th>		    
+					    <th scope="col">Conf. Senha</th> 
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+		          		<td name="pais">{{form.pais}}</td>
+		    	    	<td name="senha">{{form.senha}}</td>
+		        		<td name="comf_senha">{{form.conf_senha}}</td> 
+ 				</tbody>  	
+			</table>
+	
+			<input type="submit" class="btn btn-success" value="Salvar">
+		</form>
+	</div> 
+
+
+	<div class="pagination col-8 m-auto pt-1 pb-2" font-color="white">
+		{% if db.has_previous  %}
+			<a href="?page={{db.previous_page_number}}" title=""> Anterior </a> 
+		{% endif  %}	
+
+		{{ db.number}} <!-- Pagina Ayual -->
+
+		{% if db.has_next  %}
+		<a href="?page={{db.next_page_number}}" title=""> Proximo </a> 
+		{% endif  %}		
+	</div>
+
+{% endblock %}
+
+<script src="{{ url_for('static', filename='javascript.js') }}"></script>
+
+
+
+
+

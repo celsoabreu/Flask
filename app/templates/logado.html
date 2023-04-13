@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+
+{% block conteudo %}
+
+
+<div class="col-8 m-auto pt-1 pb-2" style="overflow-x:auto;">
+
+	<h3> DEV Python - USUARIO LOGADO {{  u.nome }} - {{ u.email }} </h3>
+	
+    <div class="col-8 m-auto pt-2 pb-2">
+        <a href="/" class="btn btn-info">Voltar</a> 
+        <a href="/logout" class="btn btn-success">Sair</a> 
+    </div> 
+   
+	
+	<h1>
+
+	LOGADO {{ u.id}}  -  {{ u.nome}}
+
+	</h1>
+	
+	<br>
+	
+	<h3> This is a heading </h3>
+	
+	<p> Because the image has a z-index of -1, it will be placed behind the text. </p>
+
+</div>
+
+
+{% endblock %}
+
+

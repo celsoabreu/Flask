@@ -1,0 +1,40 @@
+﻿{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+    <h1> Cadastro de Usuarios </h1>
+    </div> 
+    
+    <div class="col-8 m-auto pt-2 pb-2">
+        <a href="/" class="btn btn-info">Voltar</a> 
+    </div> 
+  
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+        <form name="form-users" id="formUsers" method="POST" action="/store/">
+            {% csrf_token %}    
+        
+            {% if msg %}
+            <div class="alert {{class}}"> 
+                {{msg}}
+            </div>
+            {% endif %}
+
+            <input class="form-control mt-4"  type="Text" name="name" id="name"  placeholder="Nome Completo">
+            <input class="form-control mt-4"  type="Text" name="user" id="user"  placeholder="Login do Usuario">  
+            <input class="form-control mt-4"  type="email" name="email" id="email"  placeholder="Email">
+            <input class="form-control mt-4"  type="celular" name="celular" id="celular"  placeholder="Celular no format +(99) 99 999999999 ">
+            <input class="form-control mt-4"  type="cpf" name="cpf" id="cpf"  placeholder="Cpf">
+            <input class="form-control mt-4"  type="dt_nasc" name="dt_nasc" id="dt_nasc"  placeholder="Data Nascimento">
+            <input class="form-control mt-4"  type="dt_ini" name="dt_ini" id="dt_ini"  placeholder="Data do registro">
+            <input class="form-control mt-4"  type="duracao" name="duracao" id="duracao"  placeholder="Duração ">
+            <input class="form-control mt-4"  type="password" name="senha" id="senha"  placeholder="Senha"> 
+            <input class="form-control mt-4"  type="password" name="senha_conf" id="conf_senha"  placeholder="Confirme Senha"> 
+           
+            <input class="btn btn-primary mt-4"  type="submit" value="Confirmar">
+        </form>
+    </div> 
+  
+{% endblock %}
+
+<script src="{{ url_for('static', filename='javascript.js') }}"></script>

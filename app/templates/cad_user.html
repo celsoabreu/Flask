@@ -1,0 +1,66 @@
+﻿{% extends 'layout.html' %}
+
+{% block cabec %}
+    <header  id="header" class="dropdown" width="40px" height="30px">
+        <img src="{{ url_for('static', filename='img/caon.png') }}"  width="100px" height="30px">
+
+    </header>
+{% endblock %}
+
+
+
+
+
+{% block conteudo %}
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+    <h1> Cadastro de User FLASK </h1>
+    </div> 
+    
+    <div class="col-8 m-auto pt-2 pb-2">
+      
+       
+    </div> 
+  
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+
+        <form   id="form" method="POST"  accept-charset="utf-8" >
+            <a href="/usuarios/lst_usu" class="btn btn-info mt-4"> Voltar </a> 
+            <input class="btn btn-primary mt-4"  type="submit" value="Confirmar">
+            {% if msg %}
+                <div class="alert {{class}}"> 
+                    {{msg}}
+                </div>
+            {% endif %}
+
+            {% if dt %}
+                <input class="form-control mt-4" type="Text" name="nome" id="nome" value="{{dt.nome}}"  placeholder="Nome Completo" >
+                <input class="form-control mt-4" type="Text" name="user" id="user" value="{{dt.user}}" placeholder="Login do Usuario"  >  
+                <input class="form-control mt-4" type="email" name="email" id="email" value="{{dt.email}}" placeholder="Email" >
+                <input class="form-control mt-4" type="Text" name="celular" id="celular" value="{{dt.celular}}" placeholder="Celular no format +(99) 99 999999999 ">
+                <input class="form-control mt-4" type="Text" name="cpf" id="cpf" value="{{dt.cpf}}" placeholder="Digite o CPF">
+                <input class="form-control mt-4" type="Text" name="dt_nasc" id="dt_nasc"  
+                value="{{dt.dt_nasc}}" placeholder="Data Nascimento" >
+                <input class="form-control mt-4"  type="dt_ini" name="dt_ini" id="dt_ini" value="{{dt.dt_ini}}" placeholder="Data do registro">
+                <input class="form-control mt-4"  type="duracao" name="duracao" id="duracao" value="{{dt.duracao}}" placeholder="Duração ">
+                <input class="form-control mt-4" type="password" name="senha" id="senha" value="{{dt.senha}}" placeholder="Senha" > 
+                <input class="form-control mt-4"  type="password" name="csenha" id="csenha"  placeholder="Confirme Senha" value="{{dt.csenha}}"> 
+            {% else %}
+                <input class="form-control mt-4"  type="Text" name="nome" id="nome"  placeholder="Nome Completo">
+                <input class="form-control mt-4"  type="Text" name="user" id="user"  placeholder="Login do Usuario">  
+                <input class="form-control mt-4"  type="email" name="email" id="email"  placeholder="Email">
+                <input class="form-control mt-4"  type="Text" name="celular" id="celular"  placeholder="Celular no format +(99) 99 999999999 ">
+                <input class="form-control mt-4"  type="Text" name="cpf" id="cpf"  placeholder="Digite o CPF">
+                <input class="form-control mt-4"  type="Text" name="dt_nasc" id="dt_nasc"  placeholder="Data Nascimento">
+                <input class="form-control mt-4"  type="dt_ini" name="dt_ini" id="dt_ini"  placeholder="Data do registro">
+                <input class="form-control mt-4"  type="duracao" name="duracao" id="duracao"  placeholder="Duração ">
+                <input class="form-control mt-4"  type="password" name="senha" id="senha"  placeholder="Senha"> 
+                <input class="form-control mt-4"  type="password" name="csenha" id="csenha"  placeholder="Confirme Senha"> 
+            {% endif %}          
+         
+        </form>
+    </div> 
+  
+{% endblock %}
+
+<script src="{{ url_for('static', filename='javascript.js') }}"></script>

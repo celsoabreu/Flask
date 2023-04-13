@@ -1,0 +1,47 @@
+﻿{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+   <div id="app"></div>
+
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+    <h1> IMPORTAÇÃO DE ARQUIVO XML </h1>
+    </div> 
+    
+    <div class="col-8 m-auto pt-2 pb-2">
+        <a href="/" class="btn btn-info">Voltar</a> 
+    </div> 
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+        <form name="form" id="form" method="POST" enctype="multipart/form-data"  action="   http://127.0.0.1:8000/importxml/">
+            {% csrf_token %}     
+            Upload XML 
+           
+            <input type="file" name="fileInput"  id="fileInput" /> 
+                               
+            <input type="submit" class="btn btn-success" value="Enviar"/>
+
+        </form>
+    </div> 
+
+    <script>
+        var div = document.getElementsByClassName("botaoArquivo")[0];
+        var input = document.getElementById("inputArquivo");
+
+        div.addEventListener("click", function(){
+            input.click();
+        });
+        input.addEventListener("change", function(){
+            var nome = "Não há arquivo selecionado. Selecionar arquivo...";
+            if(input.files.length > 0) nome = input.files[0].name;
+            div.innerHTML = nome;
+        });
+    </script>
+ 
+
+{% endblock %}
+
+{% load static %}
+<script src="{% static 'javascript.js' %}"></script>
+<script src="static/js/index.js">    </script> 

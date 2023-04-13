@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+
+<div class="col-8 m-auto pt-1 pb-2" style="overflow-x:auto;">
+
+	<h1>Sessao do usuario  {{data.nome}} </h1>
+
+	<p>Dados do Usuario</p>
+		<tbody class="table-group-divider">
+			<tr>
+		      	<td>{{data.login}}</td>
+		     	<td>{{data.nome}}</td>
+ 			 	<td>{{data.cpf}}</td>
+			    <td>{{data.rg}}</td>
+			    <td>{{data.datnasc}}</td>
+			</tr>
+		</tbody> 
+		<h1>This is a heading</h1>
+	
+	<img src="{%  static 'img/logoemp.png' %}" width="100px" height="30px"  align-items="center"> 
+
+	<p>Because the image has a z-index of -1, it will be placed behind the text.</p>
+
+</div>
+
+
+{% endblock %}
+
+

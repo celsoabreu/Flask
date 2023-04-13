@@ -1,0 +1,137 @@
+{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+	<div class="col-8 m-auto pt-2 pb-2 text-left">
+	<h1> Detalhe </h1>
+	</div> 
+	
+	<div class="col-8 m-auto pt-2 pb-2">
+		<a href="/usuario" class="btn btn-info">Voltar</a> 
+	</div> 
+	
+
+
+	<div class="col-8 m-auto pt-1 pb-2">
+		
+		<form name="form" id="form" action="/create/" method="POST">
+			{% csrf_token %} 	
+		<!-- Proteção para o formulario -->
+		
+		<!-- {{form.as_p}}  {{form.as_table}} -->
+
+		<!--<label>Login</label>
+			<div class="form-group mb-3"> {{form.login}} </div>	
+			<label >Nome</label>          
+			<div class="form-group mb-3"> {{form.nome}} </div>	
+			<label>CPF  </label>   
+			<div class="form-group mb-3"> {{form.cpf}} </div>	
+			<label>RG </label>      
+			<div class="form-group mb-3"> {{form.rg}} </div>	
+			<label>Nome da Mae</label>  
+			<div class="form-group mb-3"> {{form.nmae}} </div>
+			<label>Nome do Pai</label>
+			<div class="form-group mb-3"> {{form.npai}} </div>	
+			<label>E-mail</label>
+			<div class="form-group mb-3"> {{form.email}} </div>				
+			<label>Dt. Nascimento</label>
+			<div class="form-group mb-3"> {{form.datnasc}} </div>	
+			<label >Celular</label>		
+			<div class="form-group mb-3"> {{form.celular}} </div>	
+			<label>Endereço</label>			
+			<div class="form-group mb-3"> {{form.endereco}} </div>	
+			<label>Complemento</label>			
+			<div class="form-group mb-3"> {{form.endcompl}} </div>	
+			<label>Bairro</label>	
+			<div class="form-group mb-3"> {{form.bairro}} </div>
+			<label>Cep </label>	
+			<div class="form-group mb-3"> {{form.cep}} </div>
+			<label>Cidade </label>	
+			<div class="form-group mb-3"> {{form.cidade}} </div>	
+			<label>Uf </label>	
+			<div class="form-group mb-3"> {{form.uf}} </div>
+			<label>Pais </label>	
+			<div class="form-group mb-3"> {{form.pais}} </div>
+			<label>Senha </label>	
+			<div class="form-group mb-3"> {{form.senha}} </div>
+			<label>Confirme a Senha</label>	
+			<div class="form-group mb-3"> {{form.conf_senha}} </div> -->
+			
+			<table class="table">
+			<!-- 1a Coluna -->
+			  	<thead>
+				    <tr>
+				      <th scope="col">Login</th>
+				      <th scope="col">Nome</th>
+				      <th scope="col">CPF</th>
+				      <th scope="col">RG</th>
+				      <th scope="col">Nascimento</th>
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+				      	<td>{{db.login}}</td>
+				     	<td>{{db.nome}}</td>
+		 			 	<td>{{db.cpf}}</td>
+					    <td>{{db.rg}}</td>
+					    <td>{{db.datnasc}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 2a Coluna -->
+			  	<thead>
+				    <tr>
+	  					<th scope="col">Nome Mae</th>
+					    <th scope="col">Nome Pai</th>			      
+					    <th scope="col">Email</th>
+					    <th scope="col">Celular</th>
+					    <th scope="col">Endereço</th>			      
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+						<td>{{db.nmae}}</td>
+		        		<td>{{db.npai}}</td>
+		        		<td>{{db.email}}</td>
+		        		<td>{{db.celular}}</td>
+		        		<td>{{db.endereco}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 3a Coluna -->
+			  	<thead>
+				    <tr>
+					    <th scope="col">Complemento</th>	
+					    <th scope="col">Bairro</th>	
+					    <th scope="col">Cep</th>	
+					    <th scope="col">Cidade</th>	
+					    <th scope="col">UF</th>		
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+		        		<td>{{db.endcompl}}</td>
+		        		<td>{{db.bairro}}</td>
+		        		<td>{{db.cep}}</td>
+		        		<td>{{db.cidade}}</td>
+		        		<td>{{db.uf}}</td>
+					</tr>
+				</tbody>  		    
+			<!-- 4a Coluna -->
+			  	<thead>
+				    <tr>
+					    <th scope="col">Pais</th>	
+					    <th scope="col">Senha</th>		    
+					    <th scope="col">Conf. Senha</th> 
+				    </tr>
+				</thead>
+				<tbody class="table-group-divider">
+					<tr>
+		          		<td>{{db.pais}}</td>
+		    	    	<td>{{db.senha}}</td>
+		        		<td>{{db.conf_senha}}</td> 
+ 				</tbody>  	
+			</table>
+	
+		</form>
+	</div> 
+
+{% endblock %}

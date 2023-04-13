@@ -1,0 +1,38 @@
+﻿{% extends 'layout.html' %}
+
+{% block conteudo %}
+
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+    <h1> LOCAL TAX  https://www.openstreetmap.org/search?query=destino </h1>
+    </div> 
+    
+    <div class="col-8 m-auto pt-2 pb-2">
+        <a href="/" class="btn btn-info">Voltar</a> 
+    </div> 
+    
+
+    <div class="col-8 m-auto pt-2 pb-2 text-left">
+        <form name="form" method="GET" >
+            {% if msg %}
+                <div class="alert {{class }}">
+                    {{msg}}
+                </div>
+            {% endif %}
+           
+            Destino: <input type="Text" name="destino" id="destino"  placeholder="Digite seu destino"><br>
+            Origem: <input type="Text" name="origem" id="origem"  placeholder="Digite seu destino"><br>
+            Valor R$:  <input type="Text" name="valor" id="valor"  placeholder="valor"><br>
+            <a href="/https://www.openstreetmap.org/search?query=destino.value" class="btn btn-info">Pesquisar</a> 
+            
+            <a href="\acesso" class="btn btn-success">Enviar</a> 
+        </form>
+    </div> 
+
+    
+  
+  
+{% endblock %}
+
+{% load static %}
+<script src="{% static 'javascript.js' %}"></script>

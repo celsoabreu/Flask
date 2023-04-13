@@ -1,0 +1,110 @@
+ 
+{% extends 'layout.html' %}
+
+{% block cabec %}
+    <header  id="header" class="dropdown" width="40px" height="30px">
+        <img src="{{ url_for('static', filename='img/caon.png') }}"  width="100px" height="30px">
+
+    </header>
+{% endblock %}
+
+
+{% block conteudo %}
+	
+	<div class="col-8 m-auto pt-2 pb-2 text-left">
+			<form name="form" method="GET" id="form" accept-charset="utf-8">
+				Pesquisar: <input class="form-control mt-4"  type="Text" name="Pesq" id="Pesq"  placeholder="Buscar pelo Nome"> 
+				<a href="/usuarios/create" class="btn btn-success">Adicionar</a> 
+			</form>
+	</div> 
+
+	<div class="col-8 m-auto pt-1 pb-2" style="overflow-x:auto;">
+		
+		<table class="table" align-items="center">
+		  	<thead>
+			    <tr>
+			      	<th scope="col">#</th>
+			      	<th scope="col">Nome</th>
+			      	<th scope="col">Login</th>
+			      	<th scope="col">Email</th>
+			      	<th scope="col">Celular</th>
+			      	<th scope="col">CPF</th>
+<!--			    <th scope="col">Nome Mae</th>
+			      	<th scope="col">Nome Pai</th>			-->      
+			      	<th scope="col">Nasc</th>
+			     	<th scope="col">Cadastro</th>
+				    <th scope="col">Duracao</th>			      
+			      	<th scope="col">Senha</th>	
+<!--			      	<th scope="col">Bairro</th>	
+			      	<th scope="col">Cep</th>	
+			      	<th scope="col">Cidade</th>	
+			      	<th scope="col">UF</th>		
+			      	<th scope="col">Pais</th>	
+			  		<th scope="col">Senha</th>			      		      	      		      	   
+					<th scope="col">Conf. Senha</th>  -->
+			      	<th scope="col">Ações</th>	
+			    </tr>
+			</thead>
+
+			<tbody class="table-group-divider">
+				
+				{% for dbs in db %} 
+
+		   			 <tr>
+				      	<th scope="row">{{dbs.id}}</th>
+				      	<td>{{dbs.nome}}</td>
+				     	<td>{{dbs.user}}</td>
+		 			 	<td>{{dbs.email}}</td>
+					    <td>{{dbs.celular}}</td>
+		     			<td>{{dbs.cpf}}</td>
+		        		<td>{{dbs.dt_nasc}}</td>
+		        		<td>{{dbs.dt_ini}}</td>  
+		        		<td>{{dbs.duracao}}</td>
+		        		<td>{{dbs.senha}}</td>
+<!--		        		<td>{{dbs.endereco}}</td>
+		        		<td>{{dbs.endcompl}}</td>
+		        		<td>{{dbs.bairro}}</td>
+		        		<td>{{dbs.cep}}</td>
+		        		<td>{{dbs.cidade}}</td>
+		        		<td>{{dbs.uf}}</td>
+		        		<td>{{dbs.pais}}</td>
+		        	<td>{{dbs.senha}}</td>
+		        		<td>{{dbs.conf_senha}}</td> -->
+
+						<td> 
+							<a href="/usuarios/viewreg/{{dbs.id}}" class="btn btn-dark">Visualizar</a>
+							<a href="/usuarios/update/{{dbs.id}}" class="btn btn-primary">Editar</a> 
+							<a href="/usuarios/delete/{{dbs.id}}" class="btn btn-danger btnDel">Deletar</a> 
+						</td>
+
+					</tr>
+			  
+				{% endfor %} 
+
+			</tbody>  	
+
+		</table>
+
+	</div> 
+	<script src="{{ url_for('static', filename='javascript.js') }}"></script>
+
+    <div class="pagination col-8 m-auto pt-1 pb-2" font-color="Blue" >
+        {% if db.has_previous  %}
+            <a href="?page={{db.previous_page_number}}" title=""> Anterior </a> 
+        {% endif  %}    
+        <nav>
+        	
+        	" -- " {{db.number}} <!-- Pagina Ayual --> " -- "
+        	
+        </nav>
+               
+        {% if db.has_next  %}
+            <a href="?page={{db.next_page_number}}" title=""> Proximo </a> 
+        {% endif  %}        
+        
+    </div>
+
+
+
+
+{% endblock %}

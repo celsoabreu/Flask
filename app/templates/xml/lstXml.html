@@ -1,0 +1,80 @@
+ 
+{% extends 'layout.html' %}
+
+{% block conteudo %}
+	
+	<div class="col-8 m-auto pt-2 pb-2 text-left">
+			<form name="form" method="GET" >
+				Pesquisar: <input type="Text" name="pesq" id=pesq  placeholder="Buscar pelo Nome">
+				<a href="/" class="btn btn-success">Adicionar</a> 
+			</form>
+	</div> 
+
+	<div class="col-8 m-auto pt-1 pb-2" style="overflow-x:auto;">
+		
+		<table class="table" align-items="center">
+		  	<thead>
+			    <tr>
+			      	<th scope="col">#</th>
+			      	<th scope="col">Periodico</th>
+			      	<th scope="col">Artigo</th>
+			      	<th scope="col">Volume</th>
+			      	<th scope="col">Numero</th>
+			      	<th scope="col">Publicação</th>
+			      	<th scope="col">Autores</th>
+			     	<th scope="col">imagem</th>
+			      	<th scope="col">Ações</th>	
+			    </tr>
+			</thead>
+
+			<tbody class="table-group-divider">
+				
+				{% for dbs in db %} 
+
+		   			 <tr>
+				      	<th scope="row">{{dbs.id}}</th>
+				      	<td>{{dbs.tit_periodico}}</td>
+				     	<td>{{dbs.tit_artigo}}</td>
+		 			 	<td>{{dbs.volume}}</td>
+					    <td>{{dbs.numero}}</td>
+		     			<td>{{dbs.ano_public}}</td>
+		        		<td>{{dbs.autores}}</td>
+		        		<td>{{dbs.ymage}}</td>
+						<td> 
+							<a href="/viewxml/{{dbs.id}}/" class="btn btn-dark">Visualizar</a> 
+							<a href="/editxml/{{dbs.id}}/" class="btn btn-primary">Editar</a> 
+							<a href="/deletexml/{{dbs.id}}/" class="btn btn-danger btnDel">Deletar</a> 
+						</td>
+
+					</tr>
+			  
+				{% endfor %} 
+
+			</tbody>  	
+
+		</table>
+
+	</div> 
+
+<!--	{% load static %}
+	<script src="{% static 'javascript.js' %}"> </script>  -->
+    <div class="pagination col-8 m-auto pt-1 pb-2" font-color="Blue" >
+        {% if db.has_previous  %}
+            <a href="?page={{db.previous_page_number}}" title=""> Anterior </a> 
+        {% endif  %}    
+        <nav>
+        	
+        	" -- " {{db.number}} <!-- Pagina Ayual --> " -- "
+        	
+        </nav>
+               
+        {% if db.has_next  %}
+            <a href="?page={{db.next_page_number}}" title=""> Proximo </a> 
+        {% endif  %}        
+        
+    </div>
+
+
+
+
+{% endblock %}
