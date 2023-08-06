@@ -1,0 +1,728 @@
+      <form  id="form-padrao" method="POST"  accept-charset="utf-8" >
+                    
+            {% if msg %}
+                 <div class="alert {{msg.class}}"> 
+                     {{msg.msg}}
+                 </div>
+            {% endif %}
+
+            <h3> ON DRIVER </h3>
+            <br> 
+            <br>
+
+            {% if dt %}
+                Destino: <input type="searsh" name="destino" id="destino"  placeholder="Digite Destino" 
+                value="{{dt.destino}}" >
+                <br>
+                Origem: <input type="search" name="origem" id="origem"  placeholder="Digite Origem"  
+                value="{{dt.origem}}" > 
+                <br>
+                <br>
+                Valor R$:  <input type="Text" name="valor" id="valor"  placeholder="valor"><br>          
+                
+            {% else %}
+                Destino: <input type="Text" name="destino" id="destino"  placeholder="Digite destino"><br>
+                <br>
+                Origem: <input type="Text" name="origem" id="origem"  placeholder="Digite Origem"><br>
+                <br>
+                Valor R$:  <input type="Text" name="valor" id="valor"  placeholder="valor"><br>
+                
+            {% endif %}    
+            <br>      
+           
+        </form>
+
+
+class Staff(db.Model):
+
+    __tablename__ = 'staffs'
+
+    staff_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    password = db.Column(db.String(124), nullable=False)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
+    first_name = db.Column(db.String(26), nullable=False)
+    last_name = db.Column(db.String(26), nullable=False)
+    gender = db.Column(db.String(6), nullable=False)
+    birthday = db.Column(db.String(11), nullable=False)
+    mobile_number = db.Column(db.String(14), nullable=False)
+    adr_id = db.Column(db.Integer, db.ForeignKey('Adress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    customers = relationship('Customer', backref='staffs', lazy='select')
+    products = relationship('Product', backref='staffs', lazy='select')
+    categories = relationship('Category', backref='staffs', lazy='select')
+    suppliers = relationship('Supplier', backref='staffs', lazy='select')
+    supply = relationship('Supply', backref='staffs', lazy='select')
+    sales = relationship('Sale', backref='staffs', lazy='select')
+    items = relationship('Item', backref='staffs', lazy='select')
+    payments = relationship('Payment', backref='staffs', lazy='select')
+
+    def generate_password_hash(self, password):
+        return bc.hashpw(self.password, bc.gensalt())
+
+    def check_password_hash(self, plain_text_password, password):
+        return bc.checkpw(plain_text_password, self.hashed_password)
+
+class Adress(db.Model):
+
+    __tablename__ = 'adress'
+
+    adr_id = db.Column(db.Integer, primary_key=True)
+    city = db.Column(db.String(26), nullable=False)
+    state = db.Column(db.String(26), nullable=False)
+    country = db.Column(db.String(26), nullable=False)
+    address = db.Column(db.String(128), nullable=False)
+    code = db.Column(db.String(26), nullable=False)
+
+class Customer(db.Model):
+
+    __tablename__ = 'customers'
+
+    customer_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(26), nullable=False)
+    last_name = db.Column(db.String(26), nullable=False)
+    email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    gender = db.Column(db.String(7), nullable=False)
+    birthday = db.Column(db.String(11), nullable=False)
+    phone = db.Column(db.String(14), nullable=False)
+    city = db.Column(db.String(26), nullable=False)
+    state = db.Column(db.String(26), nullable=False)
+    country = db.Column(db.String(26), nullable=False)
+    address = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(128), nullable=False)
+    purchases = db.Column(db.Integer, nullable=False)
+    expenditure = db.Column(db.Float, nullable=False)
+    reward = db.Column(db.Integer, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    sales = relationship('Sale', backref='customers', lazy='select')
+    items = relationship('Item', backref='customers', lazy='select')
+    payments = relationship('Payment', backref='customers', lazy='select')
+
+
+
+class Product(db.Model):
+
+    __tablename__ = 'products'
+
+    product_id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(128), unique=True, index=True, nullable=False)
+    name = db.Column(db.String(26), nullable=False)
+    image = db.Column(db.String(128), nullable=False)
+    category = db.Column(db.Integer, db.ForeignKey('categories.product_category_id'))
+    cost_price = db.Column(db.Float, nullable=False)
+    selling_price = db.Column(db.Float, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
+    discount = db.Column(db.Float, nullable=False)
+    expires = db.Column(db.DateTime)
+    supplier = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'))
+    description = db.Column(db.String(128), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    items = relationship('Item', backref='products', lazy='select')
+
+
+class Category(db.Model):
+
+    __tablename__ = 'categories'
+
+    product_category_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(26), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    products = relationship('Product', backref='categories', lazy='select')
+
+
+class Supplier(db.Model):
+
+    __tablename__ = 'suppliers'
+
+    supplier_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(26), nullable=False)
+    debt = db.Column(db.Float, nullable=False)
+    email = db.Column(db.String(64), unique = True, index=True, nullable=False)
+    phone = db.Column(db.String(14), nullable=False)
+    city = db.Column(db.String(26), nullable=False)
+    state = db.Column(db.String(26), nullable=False)
+    country = db.Column(db.String(26), nullable=False)
+    address = db.Column(db.Float, nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    products = relationship('Product', backref='suppliers', lazy='select')
+    supplies = relationship('Supply', backref='suppliers', lazy='select')
+
+
+class Supply(db.Model):
+
+    __tablename__ = 'supplies'
+
+    supply_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(26), nullable=False)
+    supplier = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'))
+    items = db.Column(db.Integer, nullable=False)
+    value = db.Column(db.Float, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+
+class Sale(db.Model):
+
+    __tablename__ = 'sales'
+
+    sale_id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(8), unique=True, index=True, nullable=False)
+    title = db.Column(db.String(26), nullable=False)
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    total = db.Column(db.Float, nullable=False)
+    discount = db.Column(db.Float, nullable=False)
+    vat = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(26), nullable=False)
+    payment = db.Column(db.Integer, db.ForeignKey('payments.payment_id'))
+    state = db.Column(db.String(26), nullable=False)
+    item = db.Column(db.Integer, db.ForeignKey('items.item_id'))
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    payments = relationship('Payment', backref='sales', lazy='select')
+    items = relationship('Item', backref='sales', lazy='select')
+
+class Item(db.Model):
+
+    __tablename__ = 'items'
+
+    item_id = db.Column(db.Integer, primary_key=True)
+    sale = db.Column(db.Integer, db.ForeignKey('sales.sale_id'))
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    item = db.Column(db.Integer, db.ForeignKey('products.product_id'))
+    quantity = db.Column(db.Integer, nullable=False)
+    total = db.Column(db.Float, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    sales = relationship('Sale', backref='items', lazy='select')
+
+
+class Payment(db.Model):
+
+    __tablename__ = 'payments'
+
+    payment_id = db.Column(db.Integer, primary_key=True)
+    sale = db.Column(db.Integer, db.ForeignKey('sales.sale_id'))
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    status = db.Column(db.String(26), nullable=False)
+    amount_paid = db.Column(db.Float, nullable=False)
+    amount_due = db.Column(db.Float, nullable=False)
+    comment = db.Column(db.String(128), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    sales = relationship('Sale', backref='payments', lazy='select')
+
+=============================================================================================================
+
+class CaStaff(db.Model):
+    __tablename__ = 'castaffs'
+    staff_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    password = db.Column(db.String(124), nullable=False)
+    admin = db.Column(db.Boolean, default=False, nullable=False)
+    first_name = db.Column(db.String(26), nullable=False)
+    last_name = db.Column(db.String(26), nullable=False)
+    gender = db.Column(db.String(6), nullable=False)
+    birthday = db.Column(db.String(11), nullable=False)
+    mobile_number = db.Column(db.String(14), nullable=False)
+    adr_id = db.Column(db.Integer, db.ForeignKey('CaAdress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    customers = relationship('CaCustomer', backref='castaffs', lazy='select')
+    products = relationship('CaProduct', backref='castaffs', lazy='select')
+    categories = relationship('CaCategory', backref='castaffs', lazy='select')
+    suppliers = relationship('CaSupplier', backref='castaffs', lazy='select')
+    supply = relationship('CaSupply', backref='castaffs', lazy='select')
+    sales = relationship('CaSale', backref='castaffs', lazy='select')
+    items = relationship('CaItem', backref='castaffs', lazy='select')
+    payments = relationship('CaPayment', backref='castaffs', lazy='select')
+
+    def generate_password_hash(self, password):
+        return bc.hashpw(self.password, bc.gensalt())
+    def check_password_hash(self, plain_text_password, password):
+        return bc.checkpw(plain_text_password, self.hashed_password)
+	
+	def __init__(self, username, password, admin, first_name, last_name, gender, birthday, mobile_number, adr_id, added_on, modified_on):
+		self.username = username
+		self.password = password
+		self.admin = admin
+		self.first_name = first_name
+		self.last_name = last_name
+		self.gender = gender
+		self.birthday = birthday
+		self.mobile_number = mobile_number
+		self.adr_id = adr_id
+		self.added_on = added_on
+		self.modified_on = modified_on
+	
+	def __repr__(self):
+		return "<CaStaff( %r>" % self.username
+
+
+class CaCustomer(db.Model):
+    __tablename__ = 'cacustomers'
+    customer_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    first_name = db.Column(db.String(26), nullable=False)
+    last_name = db.Column(db.String(26), nullable=False)
+    email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    gender = db.Column(db.String(7), nullable=False)
+    birthday = db.Column(db.String(11), nullable=False)
+    phone = db.Column(db.String(14), nullable=False)
+    city = db.Column(db.String(26), nullable=False)
+    state = db.Column(db.String(26), nullable=False)
+    country = db.Column(db.String(26), nullable=False)
+    address = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(128), nullable=False)
+    purchases = db.Column(db.Integer, nullable=False)
+    expenditure = db.Column(db.Float, nullable=False)
+    reward = db.Column(db.Integer, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('castaffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+
+    sales = relationship('CaSale', backref='cacustomers', lazy='select')
+    items = relationship('CaItem', backref='cacustomers', lazy='select')
+    payments = relationship('CAPayment', backref='cacustomers', lazy='select')
+
+	def __init__(self, customer_id, first_name, last_name, email, gender, birthday, phone, city, state, country, address, \
+	description, purchases, expenditure, reward, author, added_on, modified_on):
+		self.customer_id = customer_id
+		self.first_name = first_name
+		self.last_name = last_name
+		self.email = email
+		self.gender = gender
+		self.birthday = birthday 
+		self.phone = phone 
+		self.city = city 
+		self.state = state 
+		self.country = country
+		self.address = address 
+		self.description = description 
+		self.purchases = purchases 
+		self.expenditure = expenditure
+		self.reward = reward
+		self.author = author 
+		self.added_on = added_on 
+		self.modified_on = modified_on 
+
+	def __repr__(self):
+		return "<CaCustomer %r>" % self.first_name 
+
+
+class CaProduct(db.Model):
+    __tablename__ = 'caproducts'
+    product_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    code = db.Column(db.String(128), unique=True, index=True, nullable=False)
+    name = db.Column(db.String(26), nullable=False)
+    image = db.Column(db.String(128), nullable=False)
+    category = db.Column(db.Integer, db.ForeignKey('categories.product_category_id'))
+    cost_price = db.Column(db.Float, nullable=False)
+    selling_price = db.Column(db.Float, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    stock = db.Column(db.Integer, nullable=False)
+    discount = db.Column(db.Float, nullable=False)
+    expires = db.Column(db.DateTime)
+    supplier = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'))
+    description = db.Column(db.String(128), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('castaffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    
+    items = relationship('CaItem', backref='caproducts', lazy='select')
+
+	def __init__(self, code, name, image, category, cost_price, selling_price, weigth, stock, discount, expires, \
+		supplier, description, author, added_on):
+		self.code = code
+		self.name = name 
+		self.image = image 
+		self.category = category 
+		self.cost_price = cost+price 
+		self.selling_price = selling_price 
+		self.weigth = weigth 
+		self.stock = stock 
+		self.discount = discount 
+		self.expires = expires 
+		self.supplier = supplier 
+		self.description = description 
+		self.author = author 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaProduct %r>" % self.name 
+
+
+class CaCategory(db.Model):
+    __tablename__ = 'cacategories'
+    category_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(26), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    
+    products = relationship('CaProduct', backref='categories', lazy='select')
+
+	def __init__(self, name, author, added_on):
+		self.category_id = category_id 
+		self.name = name 
+		self.author = author 
+		self.added_on = added_on
+		
+	def __repr__(self):
+		return "<CaCategory %r>" % self.name 
+
+
+class CaSupplier(db.Model):
+    __tablename__ = 'casupplieres'
+    supplier_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(26), nullable=False)
+    debt = db.Column(db.Float, nullable=False)
+    email = db.Column(db.String(64), unique = True, index=True, nullable=False)
+    phone = db.Column(db.String(14), nullable=False)
+    city = db.Column(db.String(26), nullable=False)
+    state = db.Column(db.String(26), nullable=False)
+    country = db.Column(db.String(26), nullable=False)
+    address = db.Column(db.Float, nullable=False)
+    description = db.Column(db.String(200), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('castaffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+ 
+    products = relationship('CaProduct', backref='casuppliers', lazy='select')
+    supplies = relationship('CaSupply', backref='casuppliers', lazy='select')
+
+	def __init__(self, name, debt, email, phone, city, state, country, address, description, author, added_on, \
+		modified_on):
+		self.name = name
+		self.debt = dedt 
+		self.email = email 
+		self.phone = phone 
+		self.city = city 
+		self.state = state 
+		self.country = country 
+		self.address = address 
+		self.description = description 
+		self.author = author 
+		self.added_on = added_on 
+		self.modified_on = modified_on
+
+	def __repr__(self):
+		return "<CaSupplier %r>" % self.name 
+
+
+class CaSupply(db.Model):
+    __tablename__ = 'casupplies'
+    supply_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(26), nullable=False)
+    supplier = db.Column(db.Integer, db.ForeignKey('casuppliers.supplier_id'))
+    items = db.Column(db.Integer, nullable=False)
+    value = db.Column(db.Float, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('castaffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+
+	def __init__(self, title, supplier, items, value, author, added_on ):
+		self.title = title_style 
+		self.supplier = supplier 
+		self.items = items 
+		self.value = value 
+		self.author = author 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaSupply %r>" % self.title
+
+
+class CaSale(db.Model):
+    __tablename__ = 'casales'
+    sale_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    code = db.Column(db.String(8), unique=True, index=True, nullable=False)
+    title = db.Column(db.String(26), nullable=False)
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    total = db.Column(db.Float, nullable=False)
+    discount = db.Column(db.Float, nullable=False)
+    vat = db.Column(db.Float, nullable=False)
+    payment_method = db.Column(db.String(26), nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payments.payment_id'))
+    state = db.Column(db.String(26), nullable=False)
+    item = db.Column(db.Integer, db.ForeignKey('items.item_id'))
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+ 
+    payments = relationship('CaPayment', backref='casales', lazy='select')
+    items = relationship('CaItem', backref='casales', lazy='select')
+
+	def __init__(self, code, title, customer, total, discount, vat, payment_method, payment_id, state, item, author, \
+	 added_on ):
+		self.code = code 
+		self.title = title 
+		self.customer = customer 
+		self.total = total 
+		self.discount = discount 
+		self.vat = vat 
+		self.payment_method = payment_method
+		self.payment_id = payment_id
+		self.state = state 
+		self.item = item 
+		self.author = author 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaSale %r>" % self.code 
+
+
+class CaItem(db.Model):
+    __tablename__ = 'caitems'
+    item_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    sale = db.Column(db.Integer, db.ForeignKey('sales.sale_id'))
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    item = db.Column(db.Integer, db.ForeignKey('products.product_id'))
+    quantity = db.Column(db.Integer, nullable=False)
+    total = db.Column(db.Float, nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+
+    sales = relationship('cASale', backref='CAitems', lazy='select')
+
+	def __init__(self, sale, customer, item, quantity, total, author, added_on):
+		self.sale = sales
+		self.customer = customer
+		self.item = item 
+		self.quantity = quantity
+		self.total = total 
+		self.author = author 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaItem %r>" % self.aplic 
+
+class CaPayment(db.Model):
+    __tablename__ = 'capayments'
+    payment_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    sale = db.Column(db.Integer, db.ForeignKey('sales.sale_id'))
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    status = db.Column(db.String(26), nullable=False)
+    amount_paid = db.Column(db.Float, nullable=False)
+    amount_due = db.Column(db.Float, nullable=False)
+    comment = db.Column(db.String(128), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'))
+    added_on = db.Column(db.DateTime)
+    modified_on = db.Column(db.DateTime)
+    
+    sales = relationship('CaSale', backref='capayments', lazy='select')
+
+	def __init__(self, sale, customer, status, amounth_paid, amount_due, comment, author, added_on, modified_on):
+		self.sale = sale 
+		self.customer = customer 
+		self.status = status 
+		self.amounth_paid = amounth_paid 
+		self.amount_due = amount_due 
+		self.comment = comment 
+		self.author = author 
+		self.added_on = added_on
+		self.modified_on = modified_on
+
+	def __repr__(self):
+		return "<CaPayment %r>" % self.sale 
+
+class CaGrpemp(models.Model):
+    __tablename__ = 'cagrpemps'
+    gre_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    descr = db.Column(db.String(100), nullable=False)
+    insc_estad = db.Column(db.String(100), nullable=False)
+    Insc_munic = db.Column(db.String(100), nullable=False)
+    dt_abertura = db.Column(db.DateTime)
+    ativo = db.Column(db.String(26), nullable=False)
+    tipo = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(100), nullable=False)
+    cnpj = db.Column(db.String(14), nullable=False)
+    adr_id = db.Column(db.Integer, db.ForeignKey('Adress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+
+	def __init__(self, descr, insc_estad, Insc_munic, dt_abertura, ativo, tipo, email, telefone, cnpj, adr_id, added_on):
+		self.descr = descr
+		self.insc_estad = insc_estad 
+		self.Insc_munic = insc_munic
+		self.dt_abertura = dt_abertura 
+		self.ativo = ativo 
+		self.tipo = tipo 
+		self.email = email 
+		self.telefone = telefone 
+		self.cnpj = Cnpj 
+		self.adr_id = adr_id 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaGrpemp %r>" % self.descr 
+
+
+class CaEmpresa(models.Model):
+    __tablename__ = 'caempresas'
+    emp_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    razao_soc = db.Column(db.String(100), nullable=False)
+    gre_id = db.Column(db.Integer, db.ForeignKey('Grpemp.gre_id')) 
+    insc_estad = db.Column(db.String(100), nullable=False)
+    Insc_munic = db.Column(db.String(100), nullable=False)
+    dt_abertura = db.Column(db.DateTime)
+    ativo = db.Column(db.String(26), nullable=False)
+    tipo = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(100), nullable=False)
+    cnpj = db.Column(db.String(14), nullable=False)
+    tp_nf = db.Column(db.String(100), nullable=False)
+    adr_id = db.Column(db.Integer, db.ForeignKey('CaAdress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+
+	def __init__(self, razao_soc, gre_id, insc_estad, Insc_munic, dt_abertura, ativo, tipo, email, telefone, cnpj, tp_nf, adr_id, added_on):
+		self.razao_soc = razao_soc 
+		self.gre_id = gre_id 
+		self.insc_estad = insc_estad 
+		self.Insc_munic = insc_munic
+		self.dt_abertura = dt_abertura 
+		self.ativo = ativo 
+		self.tipo = tipo 
+		self.email = email 
+		self.telefone = telefone 
+		self.cnpj = Cnpj 
+		self.tp_nf = tp_nf 
+		self.adr_id = adr_id 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaEmpresa %r>" % self.razao_soc 
+
+class CaCentro(models.Model):
+    __tablename__ = 'cacentros'
+    cen_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    descr = db.Column(db.String(100), nullable=False)
+    emp_id = db.Column(db.Integer, db.ForeignKey('CaEmpresa.emp_id')) 
+    insc_estad = db.Column(db.String(100), nullable=False)
+    Insc_munic = db.Column(db.String(100), nullable=False)
+    dt_abertura = db.Column(db.DateTime)
+    ativo = db.Column(db.String(26), nullable=False)
+    tipo = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    telefone = db.Column(db.String(100), nullable=False)
+    cnpj = db.Column(db.String(14), nullable=False)
+    adr_id = db.Column(db.Integer, db.ForeignKey('Adress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+
+	def __init__(self, descr, emp_id,insc_estad, Insc_munic, dt_abertura, ativo, tipo, email, telefone, cnpj, adr_id, added_on):
+		self.descr = descr
+		self.emp_id = emp_id 
+		self.insc_estad = insc_estad 
+		self.Insc_munic = insc_munic
+		self.dt_abertura = dt_abertura 
+		self.ativo = ativo 
+		self.tipo = tipo 
+		self.email = email 
+		self.telefone = telefone 
+		self.cnpj = Cnpj 
+		self.adr_id = adr_id 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaCentro %r>" % self.descr 
+
+class CaDeposito(models.Model):
+    __tablename__ = 'cadepositos'
+    dep_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    descr = db.Column(db.String(100), nullable=False)
+    cen_id = db.Column(db.Integer, db.ForeignKey('CaCentro.cen_id')) 
+    dt_abertura = db.Column(db.DateTime)
+    ativo = db.Column(db.String(26), nullable=False)
+    tipo = db.Column(db.String(100), nullable=False)
+    added_on = db.Column(db.DateTime)
+
+	def __init__(self, descr, cen_id, dt_abertura, ativo, tipo, added_on):
+		self.descr = descr
+		self.cen_id = cen_id 
+		self.dt_abertura = dt_abertura 
+		self.ativo = ativo 
+		self.tipo = tipo 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaDeposito %r>" % self.descr 
+
+
+class CaPdv(db.Model):
+    __tablename__ = 'capdvs'
+    pdv_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    descr = db.Column(db.String(100), nullable=False)
+    ativo = db.Column(db.String(26), nullable=False)
+    tipo = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    celular = db.Column(db.String(100), nullable=False)
+    docto_id = db.Column(db.String(14), nullable=False)
+    sale = db.Column(db.Integer, db.ForeignKey('sales.sale_id'))
+    customer = db.Column(db.Integer, db.ForeignKey('customers.customer_id'))
+    adr_id = db.Column(db.Integer, db.ForeignKey('Adress.adr_id')) 
+    added_on = db.Column(db.DateTime)
+
+    customers = relationship('CaCustomer', backref='capdvs', lazy='select')
+    sales = relationship('CaSale', backref='capdvs', lazy='select')
+
+	def __init__(self, descr, ativo, tipo, email, celular, docto_id, sale, customer, adr_id, added_on):
+		self.descr = descr 
+		self.ativo = ativo 
+		self.tipo = tipo 
+		self.email = email 
+		self.celular = celular 
+		self.docto_id = docto_id 
+		self.sale = sale 
+		self.customer = customer 
+		self.adr_id = adr_id 
+		self.added_on = added_on
+
+	def __repr__(self):
+		return "<CaPdv %r>" % self.descr 
+
+
+class CaPedserv(db.Model):
+    __tablename__ = 'capedservs'
+    ped_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    descr = db.Column(db.String(100), nullable=False)
+    tps_id = db.Column(db.String(300), nullable=False)
+    destino = db.Column(db.String(300), nullable=False)
+    lat_dest = db.Column(db.Float, nullable=False)
+    log_dest = db.Column(db.Float, nullable=False)
+    origrm = db.Column(db.String(300), nullable=False)
+    lat_orig = db.Column(db.Float, nullable=False)
+    log_orig = db.Column(db.Float, nullable=False)
+    user_cli = db.Column(db.String(300), nullable=False)
+    user_mot = db.Column(db.String(300), nullable=False)
+    dt_pedcar = db.Column(db.DateTime)
+    qtd_pedcar = db.Column(db.Float, nullable=False)
+    vl_calc = db.Column(db.Float, nullable=False)
+    vl_neg = db.Column(db.Float, nullable=False)
+    status = db.Column(db.Boolean, nullable=False)
+    obs = db.Column(db.String(300), nullable=False)
+
+	def __init__(self, descr, tps_id, destino, lat_dest. log_dest, origem, lat_orig, user_cli, user_mot, dt_pedcar, \
+	qtd_pedcar, vl_calc, vl_neg, status, obs ):
+		self.descr = descr 
+		self.tps_id = tps_id
+		self.destino = destino
+		self.lat_dest = lat_dest
+		self.log_dest = log_dest
+		self.origem = origem 
+		self.lat_orig = lat_orig 
+		self.user_cli = user_cli
+		self.user_mot = user_mot
+		self.dt_pedcar = dt_pedcar
+		self.qtd_pedcar = qtd_pedcar
+		self.vl_calc = vl_calc
+		self.vl_neg = vl_neg
+		self.status = status 
+		self.obs = obs
+
+	def __repr__(self):
+		return "<CaPedserv %r>" % self.descr 
+
+

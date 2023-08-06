@@ -4,13 +4,11 @@ class Cpf_cnpj:
 		if self.Cpf_cnpj_he_Valido(documento):
 			self.Cpf_cnpj = documento
 		else:
-			result = 'nok'
-			#raise ValueError('Doc_invalido')	
+			raise ValueError('Nok')
 
 	def Cpf_cnpj_he_Valido(self, documento):
 		if len(documento) == 11:
-			result = 'ok' 
+			return True  
 		else:
-			result = 'nok'
-		 	#raise ValueError('Documento Invalido !!!')
+			return False
 
